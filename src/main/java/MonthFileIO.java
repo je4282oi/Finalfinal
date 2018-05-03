@@ -1,7 +1,7 @@
 /**
  * Created by je4282oi on 5/2/2018.
  */
-//import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Cell;
 //import org.apache.poi.ss.usermodel.Row;
 //import org.apache.poi.xssf.usermodel.XSSFSheet;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -18,7 +18,7 @@ import java.util.TreeMap;
 public class MonthFileIO {
     //Reading / writing to Excel.... May / may not happen
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         XSSFWorkbook workbook = new XSSFWorkbook();
 
         XSSFSheet sheet = workbook.createSheet("Data");
@@ -27,5 +27,5 @@ public class MonthFileIO {
 
                 //Probably this would work if I had Apache downloaded
         //www.apache.org would be good start.
-    }*/
+    }
 }
