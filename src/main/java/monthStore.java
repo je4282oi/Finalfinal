@@ -10,7 +10,7 @@ public class monthStore {
     private static LinkedList<month> monthList;
 
     monthStore () {
-        monthList = new LinkedList<>();
+        monthList = new LinkedList<month>();
     }
 
     public static void add (month newMonth) {

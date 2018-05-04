@@ -13,8 +13,10 @@ public class budget_Manager {
 
     public static void main(String[] args) {
 
+        //Declare instances of classes
         budget_Manager manager = new budget_Manager();
         monthStore MonthStore = new monthStore();
+        //MonthFileIO monthFileIO = new MonthFileIO();
         manager.start();
     }
 

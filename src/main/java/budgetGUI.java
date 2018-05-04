@@ -136,6 +136,12 @@ public class budgetGUI extends JFrame{
                 previewMonthTextArea.setText(newMonth.toString());
                 resetFields();
             } });
+        saveToFileButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MonthFileIO monthFileIO;
+            }
+        });
 
         //Click to add the month data to monthStore
         // then... TODO: write information to file
