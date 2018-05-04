@@ -139,7 +139,7 @@ public class budgetGUI extends JFrame{
         saveToFileButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MonthFileIO monthFileIO;
+                //monthFileIO = new MonthFileIO();
             }
         });
 
