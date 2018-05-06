@@ -140,8 +140,8 @@ public class budgetGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 MonthFileIO monthFileIO = new MonthFileIO();
-                monthFileIO.writeToFile();
-                monthFileIO.createExcelFile();
+                //monthFileIO.writeToFile();
+                //monthFileIO.createExcelFile();
             }
         });
 
