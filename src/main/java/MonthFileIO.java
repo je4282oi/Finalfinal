@@ -28,57 +28,29 @@ public class MonthFileIO {
         HSSFWorkbook workbook = new HSSFWorkbook();
         //New sheet:
         HSSFSheet firstSheet = workbook.createSheet("2018");
-        //Set data to print:
+        /*Set data to print:
         Object[][] data = {
                 {"Month", "Totals: Home", "Groceries", "Food out", "Personal", "Travel"}, //Header row
                 {"1", "2", "3", "..."}
-        } ;
-
-        //SEt my data to print
-
-
+        };
 
         int rownum = 0;
         //For each object array in data:
-        for (Object[] d : data){
+        for (Object[] d : data) {
             Row row = firstSheet.createRow(rownum++);
             int colnum = 0;
             for (Object din : d) {
                 Cell cell = row.createCell(colnum++);
-                if (din instanceof String){
-                    cell.setCellValue((String)din);
-                }else if (din instanceof Double){
-                    cell.setCellValue((Double)din);
+                if (din instanceof String) {
+                    cell.setCellValue((String) din);
+                } else if (din instanceof Double) {
+                    cell.setCellValue((Double) din);
                 }
             }
-        }
+        }*/
 
-        try {
-            FileOutputStream outputStream = new FileOutputStream(budgetGUI.workbookName);
-            workbook.write(outputStream);
-            outputStream.close();
-        } catch (FileNotFoundException fnfe){
-            System.out.println("File Not found");
-        } catch (IOException ioe){
-            System.out.println("IOException");
-        }
-
-
-
-
-        /*readFromFile();
+        //********************Create the data object for the excel sheet
         int rownum = 0;
-        HSSFSheet firstSheet;
-        Collection<File> files;
-        HSSFWorkbook workbook = new HSSFWorkbook();
-        File exactFile;
-        {
-            //Name the first sheet:
-            //TODO: Could have this saving as current year.
-            firstSheet = workbook.createSheet("2018");
-            Row headerRow = firstSheet.createRow(rownum);
-            headerRow.setHeightInPoints(40);
-        }
         //A list to store the headings:
         List<String> headerRow = new ArrayList<>();
         headerRow.add("Month");
@@ -92,8 +64,10 @@ public class MonthFileIO {
         List<List> listToWrite = new ArrayList<>();
         listToWrite.add(headerRow);
 
+        //Using monthsToSave that gets sent as returnAllMonths
         if ((monthsToSave != null) && (monthsToSave.size() > 0)) {
             for (month m : monthsToSave) {
+                //A new arrayList for each month
                 List<String> newRow = new ArrayList<>();
                 newRow.add(m.getName());
                 //All the data is stored as text Strings in Excel
@@ -108,38 +82,40 @@ public class MonthFileIO {
             }
         } else
             System.out.println("No months to save");
-        //Send listToWrite to MonthFileIo constructor
-        //MonthFileIO clas = new MonthFileIO(listToWrite);
-        //createExcelFile();
-        FileOutputStream fileos;
-        try {
-            fileos = new FileOutputStream(new File(budgetGUI.workbookName));
-            HSSFCellStyle hsfstyle = workbook.createCellStyle();
-            hsfstyle.setBorderBottom((short) 1);
-            hsfstyle.setFillBackgroundColor((short) 245);
-            workbook.write(fileos);
-        } catch (Exception e) {
-            //e.printStackTrace();
-            System.out.println("Creating Spreadsheet didn't work");
-        }
 
-        try {
-            for (int j = 0; j < listToWrite.size(); j++) {
+        //***************************Iterate over the data object, and write it to the sheet
+
+        for (int j = 0; j < listToWrite.size(); j++) {
+                //Iterates over rows
                 Row row = firstSheet.createRow(rownum);
-                //List<String> l2 = listToWrite.get(j);
-                for (int k = 0; k < listToWrite.size(); k++) {
+                List<String> l2 = listToWrite.get(j);
+                //Iterates over columns
+                for (int k = 0; k < l2.size(); k++) {
                     Cell cell = row.createCell(k);
-                    cell.setCellValue(listToWrite.get(k));
+                    cell.setCellValue(l2.get(k));
                 }
                 rownum++;
             }
-        } catch (Exception e) {
+        /*} catch (Exception e) {
             e.printStackTrace();
             System.out.println("Writing to spreadsheet didn't work.");
             //} finally {
-        }
+        }*/
 
+        //*******************Need try catch blocks for saving it to sheet
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(budgetGUI.workbookName);
+            workbook.write(outputStream);
+            outputStream.close();
+        } catch (FileNotFoundException fnfe) {
+            System.out.println("File Not found");
+        } catch (IOException ioe) {
+            System.out.println("IOException");
+        }
     }
+
+
     //https://www.mkyong.com/java/apache-poi-reading-and-writing-excel-file-in-java/
     public static void readFromFile() {
         //Called by budget_Manager during setup.
@@ -185,7 +161,7 @@ public class MonthFileIO {
     public static boolean exists(String fileName) {
         File f = new File(fileName);
         return f.exists();
-*/
+
     }
 
 //End of class

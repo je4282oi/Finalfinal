@@ -38,7 +38,7 @@ public class budgetGUI extends JFrame{
     public static String typeTravel = "Travel purchase";
     public static String typePersonal = "Personal purchase";
 
-    static String workbookName = "BudgetExcelSheet3.xls";
+    static String workbookName = "BudgetExcelSheet5.xls";
 
     month newMonth = new month();
 
