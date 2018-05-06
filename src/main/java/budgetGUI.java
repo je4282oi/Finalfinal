@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
@@ -27,6 +28,7 @@ public class budgetGUI extends JFrame{
     private JButton saveToFileButton;
     private JButton addPurchaseAmountButton;
     private JLabel comboBoxStatusDescriptionLabel;
+    private JButton quitProgramButton;
 
     budget_Manager manager;
 
@@ -59,9 +61,10 @@ public class budgetGUI extends JFrame{
 
     //Reset after new month created
     public void resetFields() {
+        //Resets everything to zero. Activated on 'saveTofile' button
         whichMonthTextField.setText("");
         purchaseAmountTextField.setText("");
-
+        previewMonthTextArea.setText("");
     }
 
     //At the beginning and after new month added
@@ -72,15 +75,13 @@ public class budgetGUI extends JFrame{
         if (monthStore.returnAllMonths()!=null) {
             if (monthStore.returnAllMonths().size() > 0) {
                 for (month m : monthStore.returnAllMonths()) {
-                    newList.addElement(m);
-                }
-            }
+                    newList.addElement(m); } }
         }
 
         recentMonthsList.setModel(newList);
-
     }
 
+    //Set Combination box, called on Startup.
     public void setComboBox() {
         purchaseTypeComboBox.addItem("Choose Purchase Category:");
         purchaseTypeComboBox.addItem(typeHome);
@@ -90,20 +91,17 @@ public class budgetGUI extends JFrame{
         purchaseTypeComboBox.addItem(typePersonal);
     }
 
+    //Handles actions for buttons on GUI
     public void actionHandling() {
 
-        //TODO:?? Set so that dataEntryPanel only displays when addMonth pushed
-        //Use Custom Create?
-
+        //TODO: What does this DO!?
         purchaseTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (purchaseTypeComboBox.getSelectedItem() == typeHome)
-                    comboBoxStatusDescriptionLabel.setText("Entering purchase data for home:");
-            }
-        });
+                    comboBoxStatusDescriptionLabel.setText("Entering purchase data for home:"); }  });
 
-        //Set newMonth's name
+        //Set newMonth's name, display error if no month entered
         whichMonthTextField.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -113,10 +111,9 @@ public class budgetGUI extends JFrame{
                     newMonth.setName(name);
                 }
                 else
-                    JOptionPane.showMessageDialog(budgetGUI.this, "Enter a month!");
-            }  });
+                    JOptionPane.showMessageDialog(budgetGUI.this, "Enter a month!"); }  });
 
-        //Set newMonth's hashmap reading info from boxes, each time pushed
+        //Set newMonth's hashmap reading info from boxes, each time pushed. Error if NaN entered
         addPurchaseAmountButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -125,28 +122,24 @@ public class budgetGUI extends JFrame{
                 } catch (NumberFormatException nfe) {
                     JOptionPane.showMessageDialog(budgetGUI.this, "Amount must be number");
                 }
-                setName(whichMonthTextField.getText());
-            } });
+                setName(whichMonthTextField.getText()); } });
 
-        //Preview newMonth's data
+        //Preview newMonth's data and set to PreviewArea
         previewMonthButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 //setContentPane(displayPanel);
+                Color defaultColor = mainPanel.getBackground();
+                mainPanel.setBackground(defaultColor);
+                System.out.println(newMonth.toString());
+                previewMonthTextArea.setOpaque(true);
                 previewMonthTextArea.setText(newMonth.toString());
-                resetFields();
-            } });
-        saveToFileButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                MonthFileIO monthFileIO = new MonthFileIO();
-                //monthFileIO.writeToFile();
-                //monthFileIO.createExcelFile();
-            }
-        });
+                //After saving the data for previous entries, the global new month's fields should be set to 0.
+                resetNewMonth();
+                //This resets purchaseAmount, monthName and previewMonth text fields;
+                resetFields(); } });
 
         //Click to add the month data to monthStore
-        // then... TODO: write information to file
         saveToFileButton.addActionListener(new ActionListener() {
             String [] lines = new String [8];
             @Override
@@ -160,32 +153,50 @@ public class budgetGUI extends JFrame{
                 setJList();
             }  });
 
+        //Save to SpreadSheet when pushed. TODO: Also quit
+        quitProgramButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                MonthFileIO.saveMonths(monthStore.returnAllMonths());   }  });
+
 
     }
 
+    //Reset all global newMonth fields to 0 after adding to store
+    public void resetNewMonth() {
+        newMonth.setName("");
+        newMonth.setFoodOutTotal(0.0);
+        newMonth.setGrocTotal(0.0);
+        newMonth.setHomeTotal(0.0);
+        newMonth.setPersonalTotal(0.0);
+        newMonth.setTravelTotal(0.0);
+        newMonth.setTotalSaved(0.0);
+    }
 
+    //Set amount entered into correct total within object
     public void setTotals() {
-        //Set amount entered into correct total in catsAndTotals
+        //Set home total
         if (purchaseTypeComboBox.getSelectedItem() == typeHome) {
             newMonth.setHomeTotal(Double.parseDouble(purchaseAmountTextField.getText()));
             System.out.println(newMonth.getHomeTotal());
         }
+        //Set food out total
         if (purchaseTypeComboBox.getSelectedItem() == typeFoodOut){
             newMonth.setFoodOutTotal(Double.parseDouble(purchaseAmountTextField.getText()));
         }
+        //Set groceries total
         if (purchaseTypeComboBox.getSelectedItem() == typeGroc){
             newMonth.setGrocTotal(Double.parseDouble(purchaseAmountTextField.getText()));
         }
+        //set personal total
         if (purchaseTypeComboBox.getSelectedItem() == typePersonal){
             newMonth.setPersonalTotal(Double.parseDouble(purchaseAmountTextField.getText()));
         }
+        //set travel total
         if (purchaseTypeComboBox.getSelectedItem() == typeTravel){
             newMonth.setTravelTotal(Double.parseDouble(purchaseAmountTextField.getText()));
         }
-
     }
 
-    /*private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }*/
+    //End of class
 }

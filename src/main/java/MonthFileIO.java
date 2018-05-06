@@ -16,7 +16,8 @@ public class MonthFileIO {
     //Credit Morsel of Code     //Minneapolis.edu Apache-Poi
     //http://javabeginnerstutorial.com/code-base/create-excel-file-in-java-using-poi/
 
-    public static void main(String[] args) {
+    //TODO: There should be another button called 'Quit Program' which calls this.
+    public static void saveMonths(LinkedList<month> monthsToSave) {
 
         readFromFile();
         int rownum = 0;
@@ -31,118 +32,110 @@ public class MonthFileIO {
             Row headerRow = firstSheet.createRow(rownum);
             headerRow.setHeightInPoints(40);
         }
+        //A list to store the headings:
+        List<String> headerRow = new ArrayList<>();
+        headerRow.add("Month");
+        headerRow.add("Home total");
+        headerRow.add("Groceries");
+        headerRow.add("Food out");
+        headerRow.add("Personal");
+        headerRow.add("Travel");
 
-        //public static void writeToFile ()
-        {
-            try {
+        //Add headerRow to listToWrite ArrayList
+        List<List> listToWrite = new ArrayList<>();
+        listToWrite.add(headerRow);
 
-                //A list to store the headings:
-                List<String> headerRow = new ArrayList<>();
-                headerRow.add("Month");
-                headerRow.add("Home total");
-                headerRow.add("Groceries");
-                headerRow.add("Food out");
-                headerRow.add("Personal");
-                headerRow.add("Travel");
+        if ((monthsToSave != null) && (monthsToSave.size() > 0)) {
+            for (month m : monthsToSave) {
+                List<String> newRow = new ArrayList<>();
+                newRow.add(m.getName());
+                //All the data is stored as text Strings in Excel
+                //TODO: Is this what we want?
+                newRow.add(String.valueOf(m.getHomeTotal()));
+                newRow.add(String.valueOf(m.getGrocTotal()));
+                newRow.add(String.valueOf(m.getFoodOutTotal()));
+                newRow.add(String.valueOf(m.getPersonalTotal()));
+                newRow.add(String.valueOf(m.getTravelTotal()));
+                //Add each newRow to listToWRite
+                listToWrite.add(newRow);
+            }
+        } else
+            System.out.println("No months to save");
+        //Send listToWrite to MonthFileIo constructor
+        //MonthFileIO clas = new MonthFileIO(listToWrite);
+        //createExcelFile();
+        FileOutputStream fileos;
+        try {
+            fileos = new FileOutputStream(new File("BudgetExcelSheet.xls"));
+            HSSFCellStyle hsfstyle = workbook.createCellStyle();
+            hsfstyle.setBorderBottom((short) 1);
+            hsfstyle.setFillBackgroundColor((short) 245);
+            workbook.write(fileos);
+        } catch (Exception e) {
+            //e.printStackTrace();
+            System.out.println("Creating Spreadsheet didn't work");
+        }
 
-                //Add headerRow to listToWrite ArrayList
-                List<List> listToWrite = new ArrayList<>();
-                listToWrite.add(headerRow);
-
-                LinkedList<month> monthsToSave = monthStore.returnAllMonths();
-                if ((monthsToSave != null) && (monthsToSave.size() > 0)) {
-                    for (month m : monthsToSave) {
-                        List<String> newRow = new ArrayList<>();
-                        newRow.add(m.getName());
-                        //All the data is stored as text Strings in Excel
-                        //TODO: Is this what we want?
-                        newRow.add(String.valueOf(m.getHomeTotal()));
-                        newRow.add(String.valueOf(m.getGrocTotal()));
-                        newRow.add(String.valueOf(m.getFoodOutTotal()));
-                        newRow.add(String.valueOf(m.getPersonalTotal()));
-                        newRow.add(String.valueOf(m.getTravelTotal()));
-                        //Add each newRow to listToWRite
-                        listToWrite.add(newRow);
-                    }
-                } else
-                    System.out.println("No months to save");
-                //Send listToWrite to MonthFileIo constructor
-                //MonthFileIO clas = new MonthFileIO(listToWrite);
-                //createExcelFile();
-                try {
-                    for (int j = 0; j < listToWrite.size(); j++) {
-                        Row row = firstSheet.createRow(rownum);
-                        List<String> l2 = listToWrite.get(j);
-                        for (int k = 0; k < l2.size(); k++) {
-                            Cell cell = row.createCell(k);
-                            cell.setCellValue(l2.get(k));
-                        }
-                        rownum++;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-
+        try {
+            for (int j = 0; j < listToWrite.size(); j++) {
+                Row row = firstSheet.createRow(rownum);
+                List<String> l2 = listToWrite.get(j);
+                for (int k = 0; k < l2.size(); k++) {
+                    Cell cell = row.createCell(k);
+                    cell.setCellValue(l2.get(k));
                 }
-
-            } catch (Exception e) {
-                System.out.println("Not working.");
+                rownum++;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Writing to spreadsheet didn't work.");
+            //} finally {
         }
 
-        //void createExcelFile () {
-            FileOutputStream fileos;
-            try {
-                fileos = new FileOutputStream(new File("BudgetExcelSheet.xls"));
-                HSSFCellStyle hsfstyle = workbook.createCellStyle();
-                hsfstyle.setBorderBottom((short) 1);
-                hsfstyle.setFillBackgroundColor((short) 245);
-                workbook.write(fileos);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+    }
+    //https://www.mkyong.com/java/apache-poi-reading-and-writing-excel-file-in-java/
+    public static void readFromFile() {
+        //Called by budget_Manager during setup.
+        //Create Workbook instance from excel sheet
 
-        public static void readFromFile () {
-            //Create Workbook instance from excel sheet
-            //https://www.mkyong.com/java/apache-poi-reading-and-writing-excel-file-in-java/
+        try {
+            //Get the Excel File
+            FileInputStream file = new FileInputStream(new File("BudgetExcelSheet.xls"));
+            HSSFWorkbook workbook = new HSSFWorkbook(file);
+            //Get sheet at position 0
+            HSSFSheet sheet = workbook.getSheetAt(0);
 
-            try {
-                //Get the Excel File
-                FileInputStream file = new FileInputStream(new File("BudgetExcelSheet.xls"));
-                HSSFWorkbook workbook = new HSSFWorkbook(file);
-                //Get sheet at position 0
-                HSSFSheet sheet = workbook.getSheetAt(0);
-
-                //Increment over rows
-                for (Row row : sheet) {
-                    //Iterate and get the cells from the row
-                    Iterator cellIterator = row.cellIterator();
-                    // Loop till you read all the data
-                    while (cellIterator.hasNext()) {
-                        Cell cell = (Cell) cellIterator.next();
-                        switch (cell.getCellType()) {
-                            case Cell.CELL_TYPE_NUMERIC: {
-                                System.out.print(cell.getNumericCellValue() + "t");
-                                break;
-                            }
-                            case Cell.CELL_TYPE_STRING: {
-                                System.out.print(cell.getStringCellValue() + "t");
-                                break;
-                            }
+            //Increment over rows
+            for (Row row : sheet) {
+                //Iterate and get the cells from the row
+                Iterator cellIterator = row.cellIterator();
+                // Loop till you read all the data
+                while (cellIterator.hasNext()) {
+                    Cell cell = (Cell) cellIterator.next();
+                    switch (cell.getCellType()) {
+                        case Cell.CELL_TYPE_NUMERIC: {
+                            System.out.print(cell.getNumericCellValue() + "b");
+                            break;
+                        }
+                        case Cell.CELL_TYPE_STRING: {
+                            System.out.print(cell.getStringCellValue() + "t");
+                            break;
                         }
                     }
-                    System.out.println("");
                 }
-                file.close();
-            } catch (FileNotFoundException e) {
-                System.out.println("file not found");
-                e.printStackTrace();
-            } catch (IOException e) {
-                System.out.println("IO Exception happening");
-                e.printStackTrace();
+                System.out.println("");
             }
+            file.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("file not found");
+            //e.printStackTrace(); These might be what's creating npes
+        } catch (IOException e) {
+            System.out.println("IO Exception happening");
+            //e.printStackTrace();
         }
+    }
+
+//End of class
 }
 
 

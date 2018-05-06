@@ -8,17 +8,16 @@ import java.util.Scanner;
 public class budget_Manager {
 
     monthStore MonthStore;
-    budgetGUI BudgetGUI = new budgetGUI(this);
+    budgetGUI BudgetGUI;
     MonthFileIO monthFileIO;
     //monthStore MonthStore;
 
 
     public static void main(String[] args) {
-
         //Declare instances of classes
-        budget_Manager manager = new budget_Manager();
+        budget_Manager budgetmanager = new budget_Manager();
         //monthStore MonthStore = new monthStore();
-        manager.start();
+        budgetmanager.start();
     }
 
     void start() {
