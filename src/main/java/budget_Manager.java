@@ -36,9 +36,8 @@ public class budget_Manager {
         MonthStore = new monthStore();
     }
 
-    protected void addMonth (month newMonth) {
+    /*protected void addMonth (month newMonth) {
         monthStore.add(newMonth);
-    }
+    }*/
 
-
-    }
+}
