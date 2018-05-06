@@ -64,7 +64,6 @@ public class budgetGUI extends JFrame{
         //Resets everything to zero. Activated on 'saveTofile' button
         whichMonthTextField.setText("");
         purchaseAmountTextField.setText("");
-        previewMonthTextArea.setText("");
     }
 
     //At the beginning and after new month added
@@ -129,10 +128,10 @@ public class budgetGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //setContentPane(displayPanel);
-                Color defaultColor = mainPanel.getBackground();
-                mainPanel.setBackground(defaultColor);
+                //Color defaultColor = mainPanel.getBackground();
+                //mainPanel.setBackground(defaultColor);
                 System.out.println(newMonth.toString());
-                previewMonthTextArea.setOpaque(true);
+                //previewMonthTextArea.setOpaque(true);
                 previewMonthTextArea.setText(newMonth.toString());
                 //After saving the data for previous entries, the global new month's fields should be set to 0.
                 resetNewMonth();
@@ -150,6 +149,7 @@ public class budgetGUI extends JFrame{
                 //monthToSave = readMonth(lines);
                 monthStore.addMonthfromString(lines);
                 //monthStore.add(monthToSave);
+                previewMonthTextArea.setText("");
                 setJList();
             }  });
 
