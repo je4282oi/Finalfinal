@@ -38,6 +38,8 @@ public class budgetGUI extends JFrame{
     public static String typeTravel = "Travel purchase";
     public static String typePersonal = "Personal purchase";
 
+    static String workbookName = "BudgetExcelSheet3.xls";
+
     month newMonth = new month();
 
     //constructor:
@@ -157,7 +159,14 @@ public class budgetGUI extends JFrame{
         quitProgramButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                MonthFileIO.saveMonths(monthStore.returnAllMonths());   }  });
+                //if (MonthFileIO.exists(workbookName)) {
+                  //  MonthFileIO.saveMonthsAppend(monthStore.returnAllMonths());
+                //}
+                //else //Create new workbook:
+                    MonthFileIO.saveMonths(monthStore.returnAllMonths());
+                // Close the GUI
+                // this.dispose();
+            }  });
 
 
     }

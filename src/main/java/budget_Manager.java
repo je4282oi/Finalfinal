@@ -24,7 +24,7 @@ public class budget_Manager {
         createMonthStore();
         startGUI();
         //monthFileIO = new MonthFileIO();
-        monthFileIO.readFromFile();
+        //monthFileIO.readFromFile();
     }
 
     protected void startGUI() {

@@ -6,6 +6,7 @@ import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import sun.awt.image.ImageWatched;
 
 import java.io.*;
 import java.util.*;
@@ -16,10 +17,56 @@ public class MonthFileIO {
     //Credit Morsel of Code     //Minneapolis.edu Apache-Poi
     //http://javabeginnerstutorial.com/code-base/create-excel-file-in-java-using-poi/
 
+    public static void saveMonthsAppend (LinkedList<month> monthsToSave){
+        //TODO: How to append in POI?
+    }
+
     //TODO: There should be another button called 'Quit Program' which calls this.
     public static void saveMonths(LinkedList<month> monthsToSave) {
 
-        readFromFile();
+        //New workbook:
+        HSSFWorkbook workbook = new HSSFWorkbook();
+        //New sheet:
+        HSSFSheet firstSheet = workbook.createSheet("2018");
+        //Set data to print:
+        Object[][] data = {
+                {"Month", "Totals: Home", "Groceries", "Food out", "Personal", "Travel"}, //Header row
+                {"1", "2", "3", "..."}
+        } ;
+
+        //SEt my data to print
+
+
+
+        int rownum = 0;
+        //For each object array in data:
+        for (Object[] d : data){
+            Row row = firstSheet.createRow(rownum++);
+            int colnum = 0;
+            for (Object din : d) {
+                Cell cell = row.createCell(colnum++);
+                if (din instanceof String){
+                    cell.setCellValue((String)din);
+                }else if (din instanceof Double){
+                    cell.setCellValue((Double)din);
+                }
+            }
+        }
+
+        try {
+            FileOutputStream outputStream = new FileOutputStream(budgetGUI.workbookName);
+            workbook.write(outputStream);
+            outputStream.close();
+        } catch (FileNotFoundException fnfe){
+            System.out.println("File Not found");
+        } catch (IOException ioe){
+            System.out.println("IOException");
+        }
+
+
+
+
+        /*readFromFile();
         int rownum = 0;
         HSSFSheet firstSheet;
         Collection<File> files;
@@ -66,7 +113,7 @@ public class MonthFileIO {
         //createExcelFile();
         FileOutputStream fileos;
         try {
-            fileos = new FileOutputStream(new File("BudgetExcelSheet.xls"));
+            fileos = new FileOutputStream(new File(budgetGUI.workbookName));
             HSSFCellStyle hsfstyle = workbook.createCellStyle();
             hsfstyle.setBorderBottom((short) 1);
             hsfstyle.setFillBackgroundColor((short) 245);
@@ -79,10 +126,10 @@ public class MonthFileIO {
         try {
             for (int j = 0; j < listToWrite.size(); j++) {
                 Row row = firstSheet.createRow(rownum);
-                List<String> l2 = listToWrite.get(j);
-                for (int k = 0; k < l2.size(); k++) {
+                //List<String> l2 = listToWrite.get(j);
+                for (int k = 0; k < listToWrite.size(); k++) {
                     Cell cell = row.createCell(k);
-                    cell.setCellValue(l2.get(k));
+                    cell.setCellValue(listToWrite.get(k));
                 }
                 rownum++;
             }
@@ -133,6 +180,12 @@ public class MonthFileIO {
             System.out.println("IO Exception happening");
             //e.printStackTrace();
         }
+    }
+
+    public static boolean exists(String fileName) {
+        File f = new File(fileName);
+        return f.exists();
+*/
     }
 
 //End of class
