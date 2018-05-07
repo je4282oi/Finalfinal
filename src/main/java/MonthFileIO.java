@@ -123,32 +123,34 @@ public class MonthFileIO {
 
         try {
             //Get the Excel File
-            FileInputStream file = new FileInputStream(new File("BudgetExcelSheet.xls"));
-            HSSFWorkbook workbook = new HSSFWorkbook(file);
-            //Get sheet at position 0
-            HSSFSheet sheet = workbook.getSheetAt(0);
+            if (exists(budgetGUI.workbookName)) {
+                FileInputStream file = new FileInputStream(new File(budgetGUI.workbookName));
+                HSSFWorkbook workbook = new HSSFWorkbook(file);
+                //Get sheet at position 0
+                HSSFSheet sheet = workbook.getSheetAt(0);
 
-            //Increment over rows
-            for (Row row : sheet) {
-                //Iterate and get the cells from the row
-                Iterator cellIterator = row.cellIterator();
-                // Loop till you read all the data
-                while (cellIterator.hasNext()) {
-                    Cell cell = (Cell) cellIterator.next();
-                    switch (cell.getCellType()) {
-                        case Cell.CELL_TYPE_NUMERIC: {
-                            System.out.print(cell.getNumericCellValue() + "b");
-                            break;
-                        }
-                        case Cell.CELL_TYPE_STRING: {
-                            System.out.print(cell.getStringCellValue() + "t");
-                            break;
-                        }
-                    }
+                //Increment over rows
+                //Skip first row as it's headers
+                for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
+
+                    month nMonth = new month();
+                    //First cell is name
+                    nMonth.setName(sheet.getRow(i).getCell(0).getStringCellValue());
+                    //Second cell is home
+                    nMonth.setHomeTotal(Double.parseDouble(sheet.getRow(i).getCell(1).getStringCellValue()));
+                    //Third cell is groceries
+                    nMonth.setGrocTotal(Double.parseDouble(sheet.getRow(i).getCell(2).getStringCellValue()));
+                    //Fourth cell is food out
+                    nMonth.setFoodOutTotal(Double.parseDouble(sheet.getRow(i).getCell(3).getStringCellValue()));
+                    //Fifth cell is personal
+                    nMonth.setPersonalTotal(Double.parseDouble(sheet.getRow(i).getCell(4).getStringCellValue()));
+                    //Sixth cell is travel
+                    nMonth.setTravelTotal(Double.parseDouble(sheet.getRow(i).getCell(5).getStringCellValue()));
+
+                    monthStore.add(nMonth);
                 }
-                System.out.println("");
+                file.close();
             }
-            file.close();
         } catch (FileNotFoundException e) {
             System.out.println("file not found");
             //e.printStackTrace(); These might be what's creating npes
@@ -161,7 +163,6 @@ public class MonthFileIO {
     public static boolean exists(String fileName) {
         File f = new File(fileName);
         return f.exists();
-
     }
 
 //End of class

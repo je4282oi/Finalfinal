@@ -38,7 +38,7 @@ public class budgetGUI extends JFrame{
     public static String typeTravel = "Travel purchase";
     public static String typePersonal = "Personal purchase";
 
-    static String workbookName = "BudgetExcelSheet5.xls";
+    static String workbookName = "BudgetExcelSheet7.xls";
 
     month newMonth = new month();
 
@@ -46,6 +46,8 @@ public class budgetGUI extends JFrame{
     budgetGUI (budget_Manager manager) {
 
         this.manager = manager;
+
+        MonthFileIO.readFromFile();
 
         //Populates comboBox with static types of purchase
         setComboBox();
