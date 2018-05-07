@@ -96,11 +96,6 @@ public class MonthFileIO {
                 }
                 rownum++;
             }
-        /*} catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Writing to spreadsheet didn't work.");
-            //} finally {
-        }*/
 
         //*******************Need try catch blocks for saving it to sheet
 
