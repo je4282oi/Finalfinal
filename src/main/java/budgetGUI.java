@@ -76,7 +76,8 @@ public class budgetGUI extends JFrame{
         DefaultListModel<month> newList = new DefaultListModel<>();
 
         //Reset the JList to blank, to avoid repetition
-        recentMonthsList.setModel(null);
+        if (newList.size()==0)
+            recentMonthsList.setModel(newList);
 
         //Then readd to months from monthStore
         if (monthStore.returnAllMonths()!=null) {
@@ -101,13 +102,6 @@ public class budgetGUI extends JFrame{
     //Handles actions for buttons on GUI
     public void actionHandling() {
 
-        //TODO: What does this DO!?
-        purchaseTypeComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (purchaseTypeComboBox.getSelectedItem() == typeHome)
-                    comboBoxStatusDescriptionLabel.setText("Entering purchase data for home:"); }  });
-
         //Set newMonth's name, display error if no month entered
         whichMonthTextField.addActionListener(new ActionListener() {
             @Override
@@ -120,6 +114,23 @@ public class budgetGUI extends JFrame{
                 else
                     JOptionPane.showMessageDialog(budgetGUI.this, "Enter a month!"); }  });
 
+        //Sets entering label based on comboBox. Extra check
+        purchaseTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (purchaseTypeComboBox.getSelectedItem() == typeHome)
+                    comboBoxStatusDescriptionLabel.setText("Entering purchase data for home:");
+                else if (purchaseTypeComboBox.getSelectedItem() == typeFoodOut)
+                    comboBoxStatusDescriptionLabel.setText("Entering purchase data for food out: ");
+                else if (purchaseTypeComboBox.getSelectedItem() == typeGroc)
+                    comboBoxStatusDescriptionLabel.setText("Entering purchase data for groceries:");
+                else if (purchaseTypeComboBox.getSelectedItem() == typePersonal)
+                    comboBoxStatusDescriptionLabel.setText("Entering purchase data for personal");
+                else if (purchaseTypeComboBox.getSelectedItem() == typeTravel)
+                    comboBoxStatusDescriptionLabel.setText("Entering purchase data for travel:");
+
+            }  });
+
         //Set newMonth's hashmap reading info from boxes, each time pushed. Error if NaN entered
         addPurchaseAmountButton.addActionListener(new ActionListener() {
             @Override
@@ -129,7 +140,8 @@ public class budgetGUI extends JFrame{
                 } catch (NumberFormatException nfe) {
                     JOptionPane.showMessageDialog(budgetGUI.this, "Amount must be number");
                 }
-                setName(whichMonthTextField.getText()); } });
+                //setName(whichMonthTextField.getText());
+                } });
 
         //Preview newMonth's data and set to PreviewArea
         previewMonthButton.addActionListener(new ActionListener() {
@@ -155,6 +167,8 @@ public class budgetGUI extends JFrame{
                 //System.out.println(monthStore.returnAllMonths());
                 //Too easy?! monthStore.add(newMonth);
                 //month monthToSave = new month();
+
+                //Lines only contains one month's data.
                 lines = previewMonthTextArea.getText().split("\\n");
                 for (String s : lines){
                     System.out.println(s);
@@ -199,7 +213,6 @@ public class budgetGUI extends JFrame{
         //Set home total
         if (purchaseTypeComboBox.getSelectedItem() == typeHome) {
             newMonth.setHomeTotal(Double.parseDouble(purchaseAmountTextField.getText()));
-            System.out.println(newMonth.getHomeTotal());
         }
         //Set food out total
         if (purchaseTypeComboBox.getSelectedItem() == typeFoodOut){
