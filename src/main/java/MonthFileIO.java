@@ -28,26 +28,6 @@ public class MonthFileIO {
         HSSFWorkbook workbook = new HSSFWorkbook();
         //New sheet:
         HSSFSheet firstSheet = workbook.createSheet("2018");
-        /*Set data to print:
-        Object[][] data = {
-                {"Month", "Totals: Home", "Groceries", "Food out", "Personal", "Travel"}, //Header row
-                {"1", "2", "3", "..."}
-        };
-
-        int rownum = 0;
-        //For each object array in data:
-        for (Object[] d : data) {
-            Row row = firstSheet.createRow(rownum++);
-            int colnum = 0;
-            for (Object din : d) {
-                Cell cell = row.createCell(colnum++);
-                if (din instanceof String) {
-                    cell.setCellValue((String) din);
-                } else if (din instanceof Double) {
-                    cell.setCellValue((Double) din);
-                }
-            }
-        }*/
 
         //********************Create the data object for the excel sheet
         int rownum = 0;

@@ -38,7 +38,7 @@ public class budgetGUI extends JFrame{
     public static String typeTravel = "Travel purchase";
     public static String typePersonal = "Personal purchase";
 
-    static String workbookName = "BudgetExcelSheet7.xls";
+    static String workbookName = "BudgetExcelSheet9.xls";
 
     month newMonth = new month();
 
@@ -75,6 +75,10 @@ public class budgetGUI extends JFrame{
 
         DefaultListModel<month> newList = new DefaultListModel<>();
 
+        //Reset the JList to blank, to avoid repetition
+        recentMonthsList.setModel(null);
+
+        //Then readd to months from monthStore
         if (monthStore.returnAllMonths()!=null) {
             if (monthStore.returnAllMonths().size() > 0) {
                 for (month m : monthStore.returnAllMonths()) {
@@ -134,7 +138,7 @@ public class budgetGUI extends JFrame{
                 //setContentPane(displayPanel);
                 //Color defaultColor = mainPanel.getBackground();
                 //mainPanel.setBackground(defaultColor);
-                System.out.println(newMonth.toString());
+                //System.out.println(newMonth.toString());
                 //previewMonthTextArea.setOpaque(true);
                 previewMonthTextArea.setText(newMonth.toString());
                 //After saving the data for previous entries, the global new month's fields should be set to 0.
@@ -143,17 +147,23 @@ public class budgetGUI extends JFrame{
                 resetFields(); } });
 
         //Click to add the month data to monthStore
+        //TODO: Somewhere after this we get everything twice in the monthstore
         saveToFileButton.addActionListener(new ActionListener() {
             String [] lines = new String [8];
             @Override
             public void actionPerformed(ActionEvent e) {
+                //System.out.println(monthStore.returnAllMonths());
                 //Too easy?! monthStore.add(newMonth);
                 //month monthToSave = new month();
                 lines = previewMonthTextArea.getText().split("\\n");
+                for (String s : lines){
+                    System.out.println(s);
+                }
                 //monthToSave = readMonth(lines);
                 monthStore.addMonthfromString(lines);
                 //monthStore.add(monthToSave);
                 previewMonthTextArea.setText("");
+                //System.out.println(monthStore.returnAllMonths());
                 setJList();
             }  });
 

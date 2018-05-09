@@ -9,16 +9,21 @@ public class monthStore {
 
     private static LinkedList<month> monthList;
 
+    //Initialize monthList
     monthStore () {
         monthList = new LinkedList<month>();
     }
 
+    //Used by monthFileIO to read in from spreadsheet
     public static void add (month newMonth) {
         monthList.add(newMonth);
     }
+
+    //Used to add month from preview textfield:
+    //TODO: After this called we get everything twice
     public static void addMonthfromString (String [] lines) {
         String n = "", htS = "", gtS = "", ftS = "", ptS = "", ttS = "";
-        //month temp = new month();
+
         double ht = 0.0, gt = 0.0, ft = 0.0, pt = 0.0, tt = 0.0;
 
         for (int i=0; i<lines.length; i++) {
@@ -26,7 +31,6 @@ public class monthStore {
             if (lines[i].contains("for:")) {
                 n = lines[i].substring(lines[i].indexOf("Spending for:") + 13);
                 n = n.trim();
-                //temp.setName(n);
             }
             //check for homeTotal
             if (lines[i].contains("homeTotal:")) {
@@ -40,20 +44,19 @@ public class monthStore {
                 gtS = gtS.trim();
                 gt = Double.parseDouble(gtS);
             }
-
             //check for foodOut
             if (lines[i].contains("foodOutTotal:")) {
                 ftS = lines[i].substring(lines[i].indexOf("foodOutTotal:") + 13);
                 ftS = ftS.trim();
                 ft = Double.parseDouble(ftS);
             }
-
             //Check for personalTotal
             if (lines[i].contains("personalTotal:")) {
                 ptS = lines[i].substring(lines[i].indexOf("personalTotal:") + 14);
                 ptS = ptS.trim();
                 pt = Double.parseDouble(ptS);
             }
+            //check for foodTotal
             if (lines[i].contains("travelTotal:")) {
                 ttS = lines[i].substring(lines[i].indexOf("travelTotal:") + 12);
                 ttS = ttS.trim();
@@ -61,8 +64,29 @@ public class monthStore {
             }
 
         }
+        //Construct new month using values read from previewTextField
             month temp = new month (n, ht, gt, ft, tt, pt);
+
+        //Check month doesn't already exist in store:
+        if (checkNotAlready(temp)) {
+            //Add new month to list
             monthList.add(temp);
+        }
+
+    }
+
+    public static boolean checkNotAlready(month tempMonth){
+        //check the temp month not already contained in the store:
+        for (month m : monthList)
+        {
+            if (tempMonth.equals(m)){
+                return false;
+            }
+            if (tempMonth.getName().equals(m.getName())){
+                return false;
+            }
+        }
+            return true;
     }
 
 
