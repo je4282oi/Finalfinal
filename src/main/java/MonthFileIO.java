@@ -48,17 +48,17 @@ public class MonthFileIO {
         if ((monthsToSave != null) && (monthsToSave.size() > 0)) {
             for (month m : monthsToSave) {
                 //A new arrayList for each month
-                List<String> newRow = new ArrayList<>();
-                newRow.add(m.getName());
+                List<String> newCol = new ArrayList<>();
+                newCol.add(m.getName());
                 //All the data is stored as text Strings in Excel
                 //TODO: Is this what we want?
-                newRow.add(String.valueOf(m.getHomeTotal()));
-                newRow.add(String.valueOf(m.getGrocTotal()));
-                newRow.add(String.valueOf(m.getFoodOutTotal()));
-                newRow.add(String.valueOf(m.getPersonalTotal()));
-                newRow.add(String.valueOf(m.getTravelTotal()));
-                //Add each newRow to listToWRite
-                listToWrite.add(newRow);
+                newCol.add(String.valueOf(m.getHomeTotal()));
+                newCol.add(String.valueOf(m.getGrocTotal()));
+                newCol.add(String.valueOf(m.getFoodOutTotal()));
+                newCol.add(String.valueOf(m.getPersonalTotal()));
+                newCol.add(String.valueOf(m.getTravelTotal()));
+                //Add each newCol to listToWRite
+                listToWrite.add(newCol);
             }
         }
          else

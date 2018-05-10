@@ -38,7 +38,7 @@ public class budgetGUI extends JFrame{
     public static String typeTravel = "Travel purchase";
     public static String typePersonal = "Personal purchase";
 
-    static String workbookName = "BudgetExcelSheet11.xls";
+    static String workbookName = "BudgetExcelSheet13.xls";
 
     month newMonth = new month();
 
@@ -86,6 +86,7 @@ public class budgetGUI extends JFrame{
         if (monthStore.returnAllMonths()!=null) {
             if (monthStore.returnAllMonths().size() > 0) {
                 for (month m : monthStore.returnAllMonths()) {
+                    //if the returnallmonths has something that already exists in the store.(m.equals())
                     newList.addElement(m); }
             }
         }
@@ -174,25 +175,29 @@ public class budgetGUI extends JFrame{
                 //*****************Too easy?! *************TRy this to prevent double writing:
                 //monthStore.add(newMonth);
 
-
                 //month monthToSave = new month();
-
 
                 //Lines only contains one month's data.
                 lines = previewMonthTextArea.getText().split("\\n");
-                for (String s : lines){
+                /*Check: for (String s : lines){
                     System.out.println(s);
                 }
-                //monthToSave = readMonth(lines);
-                monthStore.addMonthfromString(lines);
+                monthToSave = readMonth(lines);*/
+
+                if (monthStore.addMonthfromString(lines)!=1) {
+                    previewMonthTextArea.setText("");
+                    resetNewMonth();
+
+                    //**** The extra copies come from here:**************
+                    System.out.println(monthStore.returnAllMonths());
+                    setJList();
+                }
+                lines = null;
                 //WRite month to file each time it's created to avoid doublewriting.
                 //month tempMonth = monthStore.returnAllMonths().getLast();*/
                 //MonthFileIO.saveMonths(tempMonth);
                 //monthStore.add(monthToSave);
-                previewMonthTextArea.setText("");
-                resetNewMonth();
-                //System.out.println(monthStore.returnAllMonths());
-                //setJList();
+
             }  });
 
         //Save to SpreadSheet when pushed. TODO: Also quit
