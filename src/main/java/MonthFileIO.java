@@ -21,8 +21,8 @@ public class MonthFileIO {
         //TODO: How to append in POI?
     }
 
-    //TODO: There should be another button called 'Quit Program' which calls this.
-    public static void saveMonths(LinkedList<month> monthsToSave) {
+    //TODO: Undo the extra quit program button. Just have them writing to spreadsheet once, when they're saved to list.
+    public static void saveMonths(LinkedList<month> monthsToSave /*month monthToSave*/) {
 
         //New workbook:
         HSSFWorkbook workbook = new HSSFWorkbook();
@@ -60,7 +60,8 @@ public class MonthFileIO {
                 //Add each newRow to listToWRite
                 listToWrite.add(newRow);
             }
-        } else
+        }
+         else
             System.out.println("No months to save");
 
         //***************************Iterate over the data object, and write it to the sheet
@@ -110,7 +111,7 @@ public class MonthFileIO {
 
                     month nMonth = new month();
                     //First cell is name
-                    nMonth.setName(sheet.getRow(i).getCell(0).getStringCellValue());
+                     nMonth.setName(sheet.getRow(i).getCell(0).getStringCellValue());
                     //Second cell is home
                     nMonth.setHomeTotal(Double.parseDouble(sheet.getRow(i).getCell(1).getStringCellValue()));
                     //Third cell is groceries

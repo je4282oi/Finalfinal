@@ -38,7 +38,7 @@ public class budgetGUI extends JFrame{
     public static String typeTravel = "Travel purchase";
     public static String typePersonal = "Personal purchase";
 
-    static String workbookName = "BudgetExcelSheet9.xls";
+    static String workbookName = "BudgetExcelSheet11.xls";
 
     month newMonth = new month();
 
@@ -51,8 +51,12 @@ public class budgetGUI extends JFrame{
 
         //Populates comboBox with static types of purchase
         setComboBox();
-        actionHandling();
+
+        //Populate the Jlist
         setJList();
+        //BEFORE doing the actionHAndling! And then not again afterwards, because
+        //SetJList is called again when you add a new month.
+        actionHandling();
 
         setContentPane(mainPanel);
 
@@ -76,14 +80,14 @@ public class budgetGUI extends JFrame{
         DefaultListModel<month> newList = new DefaultListModel<>();
 
         //Reset the JList to blank, to avoid repetition
-        if (newList.size()==0)
-            recentMonthsList.setModel(newList);
+        recentMonthsList.setModel(newList);
 
         //Then readd to months from monthStore
         if (monthStore.returnAllMonths()!=null) {
             if (monthStore.returnAllMonths().size() > 0) {
                 for (month m : monthStore.returnAllMonths()) {
-                    newList.addElement(m); } }
+                    newList.addElement(m); }
+            }
         }
 
         recentMonthsList.setModel(newList);
@@ -140,6 +144,8 @@ public class budgetGUI extends JFrame{
                 } catch (NumberFormatException nfe) {
                     JOptionPane.showMessageDialog(budgetGUI.this, "Amount must be number");
                 }
+                //Reset purchase amount button each time it's pressed.
+                purchaseAmountTextField.setText("");
                 //setName(whichMonthTextField.getText());
                 } });
 
@@ -154,7 +160,7 @@ public class budgetGUI extends JFrame{
                 //previewMonthTextArea.setOpaque(true);
                 previewMonthTextArea.setText(newMonth.toString());
                 //After saving the data for previous entries, the global new month's fields should be set to 0.
-                resetNewMonth();
+
                 //This resets purchaseAmount, monthName and previewMonth text fields;
                 resetFields(); } });
 
@@ -165,8 +171,12 @@ public class budgetGUI extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 //System.out.println(monthStore.returnAllMonths());
-                //Too easy?! monthStore.add(newMonth);
+                //*****************Too easy?! *************TRy this to prevent double writing:
+                //monthStore.add(newMonth);
+
+
                 //month monthToSave = new month();
+
 
                 //Lines only contains one month's data.
                 lines = previewMonthTextArea.getText().split("\\n");
@@ -175,10 +185,14 @@ public class budgetGUI extends JFrame{
                 }
                 //monthToSave = readMonth(lines);
                 monthStore.addMonthfromString(lines);
+                //WRite month to file each time it's created to avoid doublewriting.
+                //month tempMonth = monthStore.returnAllMonths().getLast();*/
+                //MonthFileIO.saveMonths(tempMonth);
                 //monthStore.add(monthToSave);
                 previewMonthTextArea.setText("");
+                resetNewMonth();
                 //System.out.println(monthStore.returnAllMonths());
-                setJList();
+                //setJList();
             }  });
 
         //Save to SpreadSheet when pushed. TODO: Also quit
@@ -189,7 +203,7 @@ public class budgetGUI extends JFrame{
                   //  MonthFileIO.saveMonthsAppend(monthStore.returnAllMonths());
                 //}
                 //else //Create new workbook:
-                    MonthFileIO.saveMonths(monthStore.returnAllMonths());
+                MonthFileIO.saveMonths(monthStore.returnAllMonths());
                 // Close the GUI
                 // this.dispose();
             }  });
